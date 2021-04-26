@@ -1,0 +1,66 @@
+//Build this code on the arduino IDE 
+#include <analogWrite.h> 
+#include<CayenneMQTTESP32.h> 
+#define CAYENNE_DEBUG 
+#define CAYENNE_PRINT 
+Serial const int analog_pin = 27;
+
+int RawValue= 0; double Voltage = 0; double tempC = 0; double tempF = 0;
+
+
+
+char ssid[] = "pocoo f1";      //include your hotspot or wifi username
+char password[] = "12345678";  //include your hotspot or wifi password
+
+char username[] = "ccca9540-b786-11e9-9f0a-fd8975d06205";
+char mqtt_password[] = "19c2bca18a65416a1c271eda1390f24654fb54cb"; 
+char client_id[] = "40999b40-cbf7-11e9-a38a-d57172a4b4d4";
+
+int waterLevelPin = 32; int sensor_pin = 35;
+int soilmoisture = 0;
+int	moisture_percentage = 0; int relayPin = 2;
+float liquid_level;
+int liquid_percentage = 0;
+
+
+void setup() 
+{
+	Cayenne.begin(username, mqtt_password, client_id, ssid, password); pinMode(35,OUTPUT);
+	pinMode(2,INPUT); 
+	pinMode(34,INPUT); 
+	pinMode(26,INPUT);
+
+	{
+		pinMode(2,OUTPUT); 
+		digitalWrite(2,LOW);
+	}
+
+
+	Serial.begin(9600);
+}
+void loop() 
+{ 
+	Cayenne.loop();
+	{
+		float moisture_percentage; 
+		int actual_value;
+		int sensor_analog;
+		sensor_analog = analogRead(sensor_pin);
+ 
+		actual_value = (sensor_analog);
+		moisture_percentage =	( (actual_value/1024) * 100	); 
+		Serial.print("Moisture Percentage ="); 
+		Serial.print(moisture_percentage);
+		Serial.print("%\n\n"); delay(1000);
+		Cayenne.virtualWrite(1, moisture_percentage);
+
+
+		{	
+			liquid_percentage = analogRead(waterLevelPin); //read the value of the water level sensor
+			Serial.print("Water level sensor value: "); //print it to the serial monitor Serial.println(liquid_percentage);
+
+			delay(300);
+		
+		}
+	}
+}

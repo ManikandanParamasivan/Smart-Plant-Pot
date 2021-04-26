@@ -1,0 +1,15 @@
+Hardware Requirement 
+1. Esp 32
+2. Soil moisture sensor
+3. water level sensor
+4. small water pump motor
+5. relay
+6. resistors
+7. 2n222 transistor
+8. jumper wires
+9. usb connector 
+
+Software Requirement 
+
+1. Ardiuno IDE
+2. Proteus Simulation or anyother simulation tool  // incase u wanna simualte rather then create it a hardware project
